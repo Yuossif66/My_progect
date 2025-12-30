@@ -1,0 +1,147 @@
+import java.util.Scanner;
+
+/* ====== كلاس الطالب (Node) ====== */
+class Student {
+    int id;
+    String name;
+    double grade;
+    Student next;
+
+    Student(int id, String name, double grade) {
+        this.id = id;
+        this.name = name;
+        this.grade = grade;
+        this.next = null;
+    }
+}
+
+/* ====== النظام الرئيسي ====== */
+public class StudentManagementSystem {
+
+    static Student head = null;
+    static Scanner input = new Scanner(System.in);
+
+    // إضافة طالب
+    public static void addStudent() {
+        System.out.print("ادخل رقم الطالب: ");
+        int id = input.nextInt();
+
+        System.out.print("ادخل اسم الطالب: ");
+        String name = input.next();
+
+        System.out.print("ادخل درجة الطالب: ");
+        double grade = input.nextDouble();
+
+        Student newStudent = new Student(id, name, grade);
+        newStudent.next = head;
+        head = newStudent;
+
+        System.out.println("✅ تمت إضافة الطالب بنجاح");
+    }
+
+    // عرض الطلاب
+    public static void displayStudents() {
+        if (head == null) {
+            System.out.println("⚠️ لا يوجد طلاب لعرضهم");
+            return;
+        }
+
+        Student temp = head;
+        System.out.println("\n📋 قائمة الطلاب:");
+        while (temp != null) {
+            System.out.println(
+                "ID: " + temp.id +
+                " | الاسم: " + temp.name +
+                " | الدرجة: " + temp.grade
+            );
+            temp = temp.next;
+        }
+    }
+
+    // تعديل بيانات طالب
+    public static void updateStudent() {
+        System.out.print("ادخل رقم الطالب للتعديل: ");
+        int id = input.nextInt();
+
+        Student temp = head;
+        while (temp != null) {
+            if (temp.id == id) {
+                System.out.print("ادخل الاسم الجديد: ");
+                temp.name = input.next();
+
+                System.out.print("ادخل الدرجة الجديدة: ");
+                temp.grade = input.nextDouble();
+
+                System.out.println("✏️ تم تعديل بيانات الطالب");
+                return;
+            }
+            temp = temp.next;
+        }
+
+        System.out.println("❌ الطالب غير موجود");
+    }
+
+    // حذف طالب
+    public static void deleteStudent() {
+        System.out.print("ادخل رقم الطالب للحذف: ");
+        int id = input.nextInt();
+
+        if (head == null) {
+            System.out.println("⚠️ القائمة فارغة");
+            return;
+        }
+
+        if (head.id == id) {
+            head = head.next;
+            System.out.println("🗑️ تم حذف الطالب");
+            return;
+        }
+
+        Student current = head;
+        while (current.next != null) {
+            if (current.next.id == id) {
+                current.next = current.next.next;
+                System.out.println("🗑️ تم حذف الطالب");
+                return;
+            }
+            current = current.next;
+        }
+
+        System.out.println("❌ الطالب غير موجود");
+    }
+
+    // القائمة الرئيسية
+    public static void main(String[] args) {
+        while (true) {
+            System.out.println("\n===== نظام إدارة الطلاب =====");
+            System.out.println("1- إضافة طالب");
+            System.out.println("2- عرض الطلاب");
+            System.out.println("3- تعديل طالب");
+            System.out.println("4- حذف طالب");
+            System.out.println("5- خروج");
+            System.out.print("اختر رقم العملية: ");
+
+            int choice = input.nextInt();
+
+            switch (choice) {
+                case 1:
+                    addStudent();
+                    break;
+                case 2:
+                    displayStudents();
+                    break;
+                case 3:
+                    updateStudent();
+                    break;
+                case 4:
+                    deleteStudent();
+                    break;
+                case 5:
+                    System.out.println("👋 تم إنهاء البرنامج");
+                    System.exit(0);
+                default:
+                    System.out.println("⚠️ خيار غير صحيح");
+            }
+        }
+    }
+}
